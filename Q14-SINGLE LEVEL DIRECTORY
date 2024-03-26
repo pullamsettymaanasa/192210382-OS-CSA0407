@@ -1,0 +1,23 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // Create first-level directory
+    system("mkdir FirstLevel");
+
+    // Create second-level directories
+    system("mkdir FirstLevel/SecondLevel1");
+    system("mkdir FirstLevel/SecondLevel2");
+
+    // Create files within the second-level directories
+    system("touch FirstLevel/SecondLevel1/file1.txt");
+    system("touch FirstLevel/SecondLevel2/file2.txt");
+
+    // Display contents of the first-level directory
+    system("ls FirstLevel");
+
+    // Deleting directories and their contents
+    system("rm -rf FirstLevel");
+
+    return 0;
+}
