@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // Dynamic Memory Allocation using malloc
+    int *arr_malloc = malloc(5 * sizeof(int));
+    if (!arr_malloc) return 1; // Allocation failed
+
+    // Dynamic Memory Allocation using calloc
+    int *arr_calloc = calloc(5, sizeof(int));
+    if (!arr_calloc) return 1; // Allocation failed
+
+    // Reallocating memory
+    arr_malloc = realloc(arr_malloc, 8 * sizeof(int));
+    if (!arr_malloc) return 1; // Reallocation failed
+
+    // Freeing dynamically allocated memory
+    free(arr_malloc);
+    free(arr_calloc);
+
+    return 0;
+}
