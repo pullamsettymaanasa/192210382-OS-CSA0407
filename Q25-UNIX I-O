@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+int main() {
+    int fd; // File descriptor
+    struct stat fileStat; // Structure to store file status
+    struct dirent *dirEntry; // Directory entry structure
+    DIR *dir; // Directory stream
+
+    // Open a file
+    fd = open("test.txt", O_RDWR | O_CREAT, 0644);
+    if (fd == -1) {
+        perror("Failed to open file");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File opened successfully\n");
+
+    // Write data into the file
+    write(fd, "Hello, this is a test file.\n", 28);
+
+    // Close the file
+    close(fd);
+
+    // File status
+    if (stat("test.txt", &fileStat) == -1) {
+        perror("Failed to get file status");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File size: %lld bytes\n", (long long)fileStat.st_size);
+    printf("File permissions: %o\n", fileStat.st_mode & 0777);
+    printf("File inode: %lu\n", fileStat.st_ino);
+
+    // Open a directory
+    dir = opendir(".");
+    if (dir == NULL) {
+        perror("Failed to open directory");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("\nDirectory contents:\n");
+    // Read directory entries
+    while ((dirEntry = readdir(dir)) != NULL) {
+        printf("%s\n", dirEntry->d_name);
+    }
+
+    // Close the directory
+    closedir(dir);
+
+    return 0;
+}
