@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int fd; // File descriptor
+    char buffer[100];
+    ssize_t numBytes;
+
+    // Create a new file
+    fd = creat("test.txt", 0644); // 0644 is the permission mode (read and write for owner, read for group and others)
+
+    if (fd == -1) {
+        perror("Failed to create file");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File created successfully\n");
+
+    // Write data into the file
+    write(fd, "Hello, this is a test file.\n", 28);
+
+    // Close the file
+    close(fd);
+
+    // Open the file for reading
+    fd = open("test.txt", O_RDONLY);
+
+    if (fd == -1) {
+        perror("Failed to open file for reading");
+        exit(EXIT_FAILURE);
+    }
+
+    // Read data from the file
+    numBytes = read(fd, buffer, sizeof(buffer));
+
+    if (numBytes == -1) {
+        perror("Failed to read from file");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Read %zd bytes from the file: %s\n", numBytes, buffer);
+
+    // Close the file
+    close(fd);
+
+    // Modify file permissions
+    if (chmod("test.txt", S_IRWXU | S_IRGRP | S_IROTH) == -1) {
+        perror("Failed to modify file permissions");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File permissions modified successfully\n");
+
+    // Rename the file
+    if (rename("test.txt", "new_test.txt") == -1) {
+        perror("Failed to rename file");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File renamed successfully\n");
+
+    // Delete the file
+    if (unlink("new_test.txt") == -1) {
+        perror("Failed to delete file");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File deleted successfully\n");
+
+    return 0;
+}
