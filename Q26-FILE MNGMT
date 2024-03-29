@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    FILE *filePointer;
+    char fileName[] = "example.txt";
+    char dataToWrite[] = "This is some data written to the file.";
+    char dataRead[100];
+
+    // Create a new file
+    filePointer = fopen(fileName, "w");
+    if (filePointer == NULL) {
+        printf("Failed to create the file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Write data to the file
+    fprintf(filePointer, "%s\n", dataToWrite);
+    fclose(filePointer);
+
+    printf("Data written to the file successfully.\n");
+
+    // Open the file for reading
+    filePointer = fopen(fileName, "r");
+    if (filePointer == NULL) {
+        printf("Failed to open the file for reading.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Read data from the file
+    fgets(dataRead, sizeof(dataRead), filePointer);
+    fclose(filePointer);
+
+    printf("Data read from the file: %s\n", dataRead);
+
+    // Delete the file
+    if (remove(fileName) != 0) {
+        printf("Failed to delete the file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("File deleted successfully.\n");
+
+    return 0;
+}
