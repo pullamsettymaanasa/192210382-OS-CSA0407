@@ -1,0 +1,63 @@
+#include <stdio.h>
+
+#define MAX_BLOCKS 50
+#define MAX_REQUESTS 50
+
+struct MemoryBlock {
+    int size;
+    int allocated;
+};
+
+void worstFit(struct MemoryBlock blocks[], int m, int requests[], int n) {
+    for (int i = 0; i < n; i++) {
+        int worstFitIdx = -1;
+        int worstFitSize = -1;
+        
+        // Find the worst fit block
+        for (int j = 0; j < m; j++) {
+            if (!blocks[j].allocated && blocks[j].size >= requests[i]) {
+                if (worstFitIdx == -1 || blocks[j].size > worstFitSize) {
+                    worstFitIdx = j;
+                    worstFitSize = blocks[j].size;
+                }
+            }
+        }
+        
+        // Allocate memory if worst fit found
+        if (worstFitIdx != -1) {
+            blocks[worstFitIdx].allocated = 1;
+            printf("Allocated memory block %d for request %d\n", worstFitIdx, i);
+        } else {
+            printf("Memory request %d cannot be allocated\n", i);
+        }
+    }
+}
+
+int main() {
+    int m; // Number of memory blocks
+    int n; // Number of memory requests
+    struct MemoryBlock blocks[MAX_BLOCKS];
+    int requests[MAX_REQUESTS];
+
+    // Input memory blocks
+    printf("Enter the number of memory blocks: ");
+    scanf("%d", &m);
+    printf("Enter the sizes of memory blocks:\n");
+    for (int i = 0; i < m; i++) {
+        scanf("%d", &blocks[i].size);
+        blocks[i].allocated = 0; // Initialize all blocks as unallocated
+    }
+
+    // Input memory requests
+    printf("Enter the number of memory requests: ");
+    scanf("%d", &n);
+    printf("Enter the sizes of memory requests:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &requests[i]);
+    }
+
+    // Perform worst fit allocation
+    worstFit(blocks, m, requests, n);
+
+    return 0;
+}
